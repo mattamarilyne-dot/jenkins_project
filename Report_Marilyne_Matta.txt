@@ -1,0 +1,38 @@
+ Lab 10 Jenkins CI CD Pipeline
+Marilyne Matta
+
+Repository
+https://github.com/mattamarilyne-dot/jenkins_project
+
+Changes made
+
+I extended the basic Jenkins pipeline with Coverage and
+Security Scan stages and implemented a local deployment script.
+
+The Coverage stage runs the unit test using coverage.py,
+displays the results, and generates HTML and XML reports.
+Jenkins archives these reports before cleaning the workspace.
+
+The Security Scan stage uses Bandit to scan app.py.
+
+The Deploy stage runs deploy.sh, which copies app.py into
+/Users/marilynematta/jenkins_deploy/jenkins_project
+and runs the deployed copy to verify its output.
+
+Build results
+
+Jenkins build #2 completed with Finished: SUCCESS.
+
+Setup - Virtual environment created and dependencies installed.
+Lint - Flake8 passed.
+Test - 1 test passed.
+Coverage - 75%, with 4 statements and 1 missed statement.
+Security Scan - Bandit reported no issues.
+Deploy - Application copied and executed successfully.
+
+The missed statement was the print statement on line 6.
+The unit test imports and tests greet(), so it does not
+execute the main block.
+
+Deployment output
+Hello, World from Marilyne Matta!
