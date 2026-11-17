@@ -26,9 +26,25 @@ pipeline {
             }
         }
 
+        stage('Coverage') {
+            steps {
+                sh '"$VIRTUAL_ENV/bin/python" -m coverage run --source=app -m pytest -v'
+                sh '"$VIRTUAL_ENV/bin/python" -m coverage report -m'
+                sh '"$VIRTUAL_ENV/bin/python" -m coverage html'
+                sh '"$VIRTUAL_ENV/bin/python" -m coverage xml'
+                archiveArtifacts artifacts: 'htmlcov/**,coverage.xml'
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                sh '"$VIRTUAL_ENV/bin/python" -m bandit app.py'
+            }
+        }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying application...'
+                sh 'sh deploy.sh'
             }
         }
     }
