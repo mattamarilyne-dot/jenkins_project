@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    environment {
+        VIRTUAL_ENV = 'venv'
+        PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
+    }
+
+    stages {
+        stage('Setup') {
+            steps {
+                sh 'python3 -m venv "$VIRTUAL_ENV"'
+                sh '"$VIRTUAL_ENV/bin/python" -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                sh '"$VIRTUAL_ENV/bin/python" -m flake8 app.py'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh '"$VIRTUAL_ENV/bin/python" -m pytest -v'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
